@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日祝福完整版</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff99cc, #ff6699, #ff3366);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin: 0 0 20px 0;
+        }
+
+        .cake {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .message {
+            display: none;
+            color: #fff;
+            font-size: 1.5em;
+            margin-top: 20px;
+            animation: fadeIn 2s;
+        }
+
+        .balloon {
+            position: absolute;
+            animation: balloon 6s linear infinite;
+        }
+
+        .photo-wall {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            max-width: 90%;
+            overflow-x: auto;
+        }
+
+        .photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-size: cover;
+            border: 2px solid white;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6699, #ff3366);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255,51,102,0.4);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes balloon {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .cake { width: 120px; }
+            .photo-wall { bottom: 10px; }
+            .photo { width: 40px; height: 40px; }
+            button { padding: 10px 20px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <h1>🎉 生日快乐！ 🎉</h1>
+        <img src="生成蛋糕图片.png" class="cake" alt="蛋糕" onclick="showMessage()">
+        <div class="message" id="message">童子赫，愿你每天都有好心情！🎂</div>
+        <h3>2025年3月13号</h3>
+        <button onclick="playMusic()">播放音乐 🎵</button>
+    </div>
+
+    <div class="photo-wall" id="photoWall"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="QQ音乐宠物合唱团 - 祝你生日快乐.ogg" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 初始化星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for(let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 创建照片墙
+        function createPhotoWall() {
+            const photos = [
+                'https://picsum.photos/200?random=1',
+                'https://picsum.photos/200?random=2',
+                'https://picsum.photos/200?random=3',
+                'https://picsum.photos/200?random=4'
+            ];
+            
+            const wall = document.getElementById('photoWall');
+            photos.forEach(imgUrl => {
+                const photo = document.createElement('div');
+                photo.className = 'photo';
+                photo.style.backgroundImage = `url(${imgUrl})`;
+                photo.onclick = () => {
+                    photo.style.transform = 'scale(1.5) rotate(360deg)';
+                    setTimeout(() => photo.style.transform = '', 500);
+                };
+                wall.appendChild(photo);
+            });
+        }
+
+        // 显示祝福信息
+        function showMessage() {
+            document.getElementById('message').style.display = 'block';
+            createFireworks();
+            // 添加容器抖动效果
+            document.querySelector('.container').style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                document.querySelector('.container').style.animation = '';
+            }, 500);
+        }
+
+        // 播放音乐
+        function playMusic() {
+            const audio = document.getElementById('bgMusic');
+            audio.play();
+            event.target.style.display = 'none';
+            createBalloons();
+            // 添加背景星光增强
+            document.body.style.animation = 'pulse 2s infinite';
+        }
+
+        // 创建气球
+        function createBalloons() {
+            const colors = ['#ff3366', '#33ccff', '#ff9933', '#99ff33'];
+            for(let i = 0; i < 20; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.innerHTML = '🎈';
+                balloon.style.left = Math.random() * 100 + 'vw';
+                balloon.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                balloon.style.animationDelay = Math.random() * 5 + 's';
+                balloon.style.color = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(balloon);
+            }
+        }
+
+        // 创建烟花效果
+        function createFireworks() {
+            for(let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.innerHTML = '✨';
+                particle.style.fontSize = '20px';
+                particle.style.animation = `firework ${Math.random()*1+0.5}s ease-out`;
+                
+                const angle = (Math.random() * 360) * Math.PI/180;
+                const distance = Math.random() * 100;
+                particle.style.transform = `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`;
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 500);
+            }
+        }
+
+        // 初始化
+        createStars();
+        createPhotoWall();
+    </script>
+</body>
+</html>
